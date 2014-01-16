@@ -115,19 +115,18 @@ public class EventProcessorImpl implements ServiceBusListener {
 				oldDtobj = (ExplorerObject) storage.getObjectById(id);
 			} catch (NotFoundException e) {}
 
-			Set<String> diff = findDifferences(oldMap, newMap);
-			
 			ExplorerObject explorerObject = null;
 			if (oldDtobj == null) {
-				explorerObject	 = new ExplorerObject(); 
+				explorerObject	 = new ExplorerObject();
+				oldMap = new TreeMap<String, Object>();
 			} else {
 				explorerObject = oldDtobj;
 			}
 			explorerObject.setType("Event");
 			explorerObject.setSource(Subscriber.ROVERETO_EXPLORER);
 			explorerObject.setId(id);
-//			explorerObject.setServiceData(newMap);
 
+			Set<String> diff = findDifferences(oldMap, newMap);
 			copySourceData(explorerObject, newMap, diff);
 			
 			ServiceDataObject sdo = new ServiceDataObject(id);
