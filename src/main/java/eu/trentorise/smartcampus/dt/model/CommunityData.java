@@ -24,15 +24,9 @@ public class CommunityData extends DomainCommunityData {
 	private static final long serialVersionUID = 5926048335916274968L;
 
 	private int ratingsCount = 0;
-	private int followsCount = 0;
 
 	public CommunityData() {
 		super();
-	}
-
-	public void setFollowing(Map<String, String> following) {
-		super.setFollowing(following);
-		setFollowsCount(following == null ? 0 : following.size());
 	}
 
 	public void setRatings(List<Rating> ratings) {
@@ -94,11 +88,5 @@ public class CommunityData extends DomainCommunityData {
 		this.ratingsCount = ratingsCount;
 	}
 
-	public int getFollowsCount() {
-		return followsCount;
-	}
 
-	public void setFollowsCount(int followCount) {
-		this.followsCount = followCount;
-	}
 }
