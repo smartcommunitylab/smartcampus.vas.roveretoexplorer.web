@@ -93,7 +93,6 @@ public class EventProcessorImpl implements ServiceBusListener {
 			Map<String, Object> newMap = updateEventsSources(er);
 			
 			String titolo = er.getTitolo();
-			System.out.println(titolo);
 			String id = encode(Subscriber.GET_EVENTI_ROVERETO + "_" + titolo + "_" + er.getId());
 
 			ServiceDataObject oldServiceData = null;
@@ -110,7 +109,7 @@ public class EventProcessorImpl implements ServiceBusListener {
 			}			
 			
 			ExplorerObject oldDtobj = null;
-
+			
 			try {
 				oldDtobj = (ExplorerObject) storage.getObjectById(id);
 			} catch (NotFoundException e) {}
@@ -127,7 +126,7 @@ public class EventProcessorImpl implements ServiceBusListener {
 			explorerObject.setId(id);
 
 			Set<String> diff = findDifferences(oldMap, newMap);
-			copySourceData(explorerObject, newMap, diff);
+			copySourceData(explorerObject, oldMap, newMap, diff);
 			
 			ServiceDataObject sdo = new ServiceDataObject(id);
 			sdo.setData(newMap);
@@ -135,61 +134,80 @@ public class EventProcessorImpl implements ServiceBusListener {
 			
 			if (!diff.isEmpty()) {
 				storage.storeObject(explorerObject);
-				System.out.println("CHANGED " + id);
+				System.out.println("CHANGED "  + titolo + ": " + id);
 			}
 		}
 
 	}
 
 	private Set<String> findDifferences(Map<String, Object> oldMap, Map<String, Object> newMap) {
+		if (oldMap == null) {
+			return newMap.keySet();
+		}
 		MapDifference<String, Object> diffMap = Maps.difference(oldMap, newMap);
 		Set<String> diff = new HashSet(diffMap.entriesDiffering().keySet());
 		diff.addAll(diffMap.entriesOnlyOnRight().keySet());
 		return diff;
 	}
 	
-	private void copySourceData(ExplorerObject explorerObject, Map<String, Object> map, Set<String> only) {
+	private void copySourceData(ExplorerObject explorerObject, Map<String, Object> oldMap, Map<String, Object> newMap, Set<String> only) {
 		if (only.contains("titolo")) {
-			explorerObject.setTitle((String)map.get("titolo"));
+			explorerObject.setTitle((String)newMap.get("titolo"));
 		}
 		if (only.contains("descrizione")) {
-			explorerObject.setDescription((String)map.get("descrizione"));
+			explorerObject.setDescription((String)newMap.get("descrizione"));
 		}
 		if (only.contains("lat") && only.contains("lon")) {
-		double loc[] = new double[] { (Double)map.get("lat"), (Double)map.get("lon") };
+		double loc[] = new double[] { (Double)newMap.get("lat"), (Double)newMap.get("lon") };
 		explorerObject.setLocation(loc);
 		}
 		if (only.contains("fromTime")) {
-			explorerObject.setFromTime((Long)map.get("fromTime"));
+			explorerObject.setFromTime((Long)newMap.get("fromTime"));
 		}		
 		if (only.contains("toTime")) {
-			explorerObject.setFromTime((Long)map.get("toTime"));
+			explorerObject.setFromTime((Long)newMap.get("toTime"));
 		}				
 		if (only.contains("whenWhere")) {
-			explorerObject.setWhenWhere((String)map.get("whenWhere"));
+			explorerObject.setWhenWhere((String)newMap.get("whenWhere"));
 		}					
 		if (only.contains("tipo")) {
-			explorerObject.setCategory((String)map.get("tipo"));
+			explorerObject.setCategory((String)newMap.get("tipo"));
 		}					
 		if (only.contains("fonte")) {
-			explorerObject.setOrigin((String)map.get("fonte"));
+			explorerObject.setOrigin((String)newMap.get("fonte"));
 		}			
 		if (only.contains("image")) {
-			explorerObject.setImage((String)map.get("image"));
+			explorerObject.setImage((String)newMap.get("image"));
 		}
 		if (only.contains("url")) {
-			explorerObject.setUrl((String)map.get("url"));
+			explorerObject.setUrl((String)newMap.get("url"));
 		}				
 		
 		// TODO check different fields?
 		
 		if (only.contains("indirizzo")) {
-			explorerObject.setAddress((Map)map.get("indirizzo"));
+//			explorerObject.setAddress((Map)newMap.get("indirizzo"));
+			explorerObject.setAddress(updateMap(explorerObject.getAddress(), (Map)oldMap.get("indirizzo"), (Map)newMap.get("indirizzo")));
 		}				
 		if (only.contains("contacts")) {
-			explorerObject.setContacts((Map)map.get("contacts"));
+//			explorerObject.setContacts((Map)newMap.get("contacts"));
+			explorerObject.setContacts(updateMap(explorerObject.getContacts(), (Map)oldMap.get("indirizzo"), (Map)newMap.get("contacts")));
 		}					
 		
+	}
+	
+	private Map<String, Object> updateMap(Map<String, Object> dtMap, Map<String, Object> oldMap, Map<String, Object> newMap) {
+		Map<String, Object> newDtMap;
+		if (dtMap == null) {
+			newDtMap = new TreeMap<String, Object>();
+		} else {
+			newDtMap = dtMap;
+		}
+		Set<String> diff = findDifferences(oldMap, newMap);
+		for (String d: diff) {
+			newDtMap.put(d, newMap.get(d));
+		}
+		return newDtMap;
 	}
 	
 	public BasicObjectSyncStorage getStorage() {
