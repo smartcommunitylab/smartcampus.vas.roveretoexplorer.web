@@ -28,9 +28,6 @@ public class BaseDTObject extends BasicObject {
 	private String title = null;
 	private String source = null; // service 'source' of the object
 
-	// semantic entity
-	private Long entityId = null;
-	
 	// community data
 	protected CommunityData communityData = null;
 	
@@ -110,16 +107,6 @@ public class BaseDTObject extends BasicObject {
 
 	public void setToTime(Long toTime) {
 		this.toTime = toTime;
-	}
-
-	
-
-	public Long getEntityId() {
-		return entityId;
-	}
-
-	public void setEntityId(Long entityId) {
-		this.entityId = entityId;
 	}
 
 	public Map<String, Object> getCustomData() {

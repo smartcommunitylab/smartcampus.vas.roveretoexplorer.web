@@ -15,22 +15,84 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.dt.model;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class CommunityData extends DomainCommunityData {
+public class CommunityData {
 	private static final long serialVersionUID = 5926048335916274968L;
 
-	private int ratingsCount = 0;
+	protected List<String> tags = new ArrayList<String>();
+	protected String notes;
 
+	protected List<Rating> ratings = new ArrayList<Rating>();
+	protected int ratingsCount = 0;
+	protected int averageRating;
+	
+	protected Set<String> attending = new HashSet<String>();
+	protected Integer attendees = 0;	
+	
 	public CommunityData() {
 		super();
 	}
 
+	public List<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+
+	public int getAverageRating() {
+		return averageRating;
+	}
+
+	public void setAverageRating(int averageRating) {
+		this.averageRating = averageRating;
+	}
+
+	public List<Rating> getRatings() {
+		return ratings;
+	}
+
+	public Set<String> getAttending() {
+		return attending;
+	}
+
+	public void setAttending(Set<String> attending) {
+		this.attending = attending;
+	}
+
+	public Integer getAttendees() {
+		return attendees;
+	}
+
+	public void setAttendees(Integer attendees) {
+		this.attendees = attendees;
+	}
+	
+	public int getRatingsCount() {
+		return ratingsCount;
+	}
+
+	public void setRatingsCount(int ratingsCount) {
+		this.ratingsCount = ratingsCount;
+	}		
+	
 	public void setRatings(List<Rating> ratings) {
-		super.setRatings(ratings);
+		this.ratings = ratings;
 		setRatingsCount(ratings == null ? 0 : ratings.size());
 	}
 
@@ -79,14 +141,5 @@ public class CommunityData extends DomainCommunityData {
 			filterUserData(data, userId);
 		}
 	}
-
-	public int getRatingsCount() {
-		return ratingsCount;
-	}
-
-	public void setRatingsCount(int ratingsCount) {
-		this.ratingsCount = ratingsCount;
-	}
-
 
 }
