@@ -275,7 +275,7 @@ public class ObjectController extends AbstractObjectController {
 			
 			ExplorerObject oldObject = (ExplorerObject)syncStorage.getObjectById(newObject.getId());
 			if (oldObject == null) {
-				logger.error("Trying to edit not existing object");
+				logger.error("Trying to edit a non-existent object");
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				return null;
 			}
