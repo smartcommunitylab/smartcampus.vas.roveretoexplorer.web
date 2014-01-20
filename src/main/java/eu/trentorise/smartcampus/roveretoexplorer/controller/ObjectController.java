@@ -58,7 +58,7 @@ public class ObjectController extends AbstractObjectController {
 				userId = getUserId();
 			} catch (SecurityException e) {
 				logger.error("Failed to rate object with id " + id + " as user " + userId + ": " + e.getMessage());
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 				return;
 			}
 
@@ -177,7 +177,7 @@ public class ObjectController extends AbstractObjectController {
 				userId = bp.getUserId();
 			} catch (SecurityException e) {
 				logger.error("Failed to review object with id " + parentId + " as user " + userId + ": " + e.getMessage());
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 				return null;
 			}
 
@@ -232,7 +232,7 @@ public class ObjectController extends AbstractObjectController {
 				userId = getUserId();
 			} catch (SecurityException e) {
 				logger.error("Failed to attend object with id " + id + " as user " + userId + ": " + e.getMessage());
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 				return;
 			}
 
@@ -269,7 +269,7 @@ public class ObjectController extends AbstractObjectController {
 				userId = bp.getUserId();
 			} catch (SecurityException e) {
 				logger.error("Failed to edit object: " + e.getMessage());
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 				return null;
 			}
 			
