@@ -38,7 +38,7 @@ import com.google.common.collect.Maps;
 import com.google.protobuf.ByteString;
 import com.googlecode.protobuf.format.JsonFormat;
 
-import eu.trentorise.smartcampus.dt.model.BaseDTObject;
+import eu.trentorise.smartcampus.dt.model.Address;
 import eu.trentorise.smartcampus.dt.model.ExplorerObject;
 import eu.trentorise.smartcampus.dt.model.ServiceDataObject;
 import eu.trentorise.smartcampus.presentation.common.exception.NotFoundException;
@@ -97,8 +97,8 @@ public class EventProcessorImpl implements ServiceBusListener {
 		subMap.put("phone", new ArrayList<String>());
 		subMap.put("email", "");
 		subMap.put("fax", "");
-		subMap.put("facebook", "");
-		subMap.put("twitter", "");
+//		subMap.put("facebook", "");
+//		subMap.put("twitter", "");
 		customMap.put("contacts", subMap);
 	}
 
@@ -194,15 +194,32 @@ public class EventProcessorImpl implements ServiceBusListener {
 		if (only.contains("image")) {
 			explorerObject.setImage((String)newMap.get("image"));
 		}
-		if (only.contains("url")) {
-			explorerObject.setUrl((String)newMap.get("url"));
+		if (only.contains("websiteUrl")) {
+			explorerObject.setWebsiteUrl((String)newMap.get("websiteUrl"));
 		}				
+		if (only.contains("websiteUrl")) {
+			explorerObject.setWebsiteUrl((String)newMap.get("websiteUrl"));
+		}						
 		
 		// TODO check different fields?
 		
 		if (only.contains("indirizzo")) {
-//			explorerObject.setAddress((Map)newMap.get("indirizzo"));
-			explorerObject.setAddress(updateMap(explorerObject.getAddress(), (Map)oldMap.get("indirizzo"), (Map)newMap.get("indirizzo")));
+			Map nMap = (Map)newMap.get("indirizzo");
+			Set<String> diff = findDifferences((Map)oldMap.get("indirizzo"), nMap);
+			Address address = explorerObject.getAddress();
+			if (address == null) {
+				address = new Address();
+			}
+			if (diff.contains("place")) {
+				address.setLuogo((String)nMap.get("place"));
+			}
+			if (diff.contains("street")) {
+				address.setVia((String)nMap.get("street"));
+			}
+			if (diff.contains("town")) {
+				address.setCitta((String)nMap.get("town"));
+			}			
+			explorerObject.setAddress(address);
 		}				
 		if (only.contains("contacts")) {
 //			explorerObject.setContacts((Map)newMap.get("contacts"));

@@ -27,11 +27,15 @@ public class ExplorerObject extends BaseDTObject {
 	
 	private String whenWhere;
 	private String image;
-	private String url;
 	private String origin;
 	private String category;
 	private Map<String,Object> contacts;
-	private Map<String,Object> address;
+	
+  private String websiteUrl = null;
+  private String facebookUrl = null;
+  private String twitterUrl = null;	
+	
+	private Address address;
 	
 	public ExplorerObject() {
 		communityData = new CommunityData();
@@ -51,14 +55,6 @@ public class ExplorerObject extends BaseDTObject {
 
 	public void setImage(String image) {
 		this.image = image;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
 	}
 
 	public String getOrigin() {
@@ -85,11 +81,35 @@ public class ExplorerObject extends BaseDTObject {
 		this.contacts = contacts;
 	}
 
-	public Map<String, Object> getAddress() {
+	public String getWebsiteUrl() {
+		return websiteUrl;
+	}
+
+	public void setWebsiteUrl(String websiteUrl) {
+		this.websiteUrl = websiteUrl;
+	}
+
+	public String getFacebookUrl() {
+		return facebookUrl;
+	}
+
+	public void setFacebookUrl(String facebookUrl) {
+		this.facebookUrl = facebookUrl;
+	}
+
+	public String getTwitterUrl() {
+		return twitterUrl;
+	}
+
+	public void setTwitterUrl(String twitterUrl) {
+		this.twitterUrl = twitterUrl;
+	}
+
+	public Address getAddress() {
 		return address;
 	}
 
-	public void setAddress(Map<String, Object> address) {
+	public void setAddress(Address address) {
 		this.address = address;
 	}
 

@@ -48,9 +48,9 @@ public final class Roveretoexplorer {
     eu.trentorise.smartcampus.service.roveretoexplorer.data.message.Roveretoexplorer.Address getIndirizzo();
     eu.trentorise.smartcampus.service.roveretoexplorer.data.message.Roveretoexplorer.AddressOrBuilder getIndirizzoOrBuilder();
     
-    // required string url = 10;
-    boolean hasUrl();
-    String getUrl();
+    // required string websiteUrl = 10;
+    boolean hasWebsiteUrl();
+    String getWebsiteUrl();
     
     // required string tipo = 11;
     boolean hasTipo();
@@ -274,14 +274,14 @@ public final class Roveretoexplorer {
       return indirizzo_;
     }
     
-    // required string url = 10;
-    public static final int URL_FIELD_NUMBER = 10;
-    private java.lang.Object url_;
-    public boolean hasUrl() {
+    // required string websiteUrl = 10;
+    public static final int WEBSITEURL_FIELD_NUMBER = 10;
+    private java.lang.Object websiteUrl_;
+    public boolean hasWebsiteUrl() {
       return ((bitField0_ & 0x00000200) == 0x00000200);
     }
-    public String getUrl() {
-      java.lang.Object ref = url_;
+    public String getWebsiteUrl() {
+      java.lang.Object ref = websiteUrl_;
       if (ref instanceof String) {
         return (String) ref;
       } else {
@@ -289,17 +289,17 @@ public final class Roveretoexplorer {
             (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          url_ = s;
+          websiteUrl_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getUrlBytes() {
-      java.lang.Object ref = url_;
+    private com.google.protobuf.ByteString getWebsiteUrlBytes() {
+      java.lang.Object ref = websiteUrl_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        url_ = b;
+        websiteUrl_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -412,7 +412,7 @@ public final class Roveretoexplorer {
       lat_ = 0D;
       lon_ = 0D;
       indirizzo_ = eu.trentorise.smartcampus.service.roveretoexplorer.data.message.Roveretoexplorer.Address.getDefaultInstance();
-      url_ = "";
+      websiteUrl_ = "";
       tipo_ = "";
       fonte_ = "";
       whenWhere_ = "";
@@ -438,7 +438,7 @@ public final class Roveretoexplorer {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasUrl()) {
+      if (!hasWebsiteUrl()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -489,7 +489,7 @@ public final class Roveretoexplorer {
         output.writeMessage(9, indirizzo_);
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
-        output.writeBytes(10, getUrlBytes());
+        output.writeBytes(10, getWebsiteUrlBytes());
       }
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
         output.writeBytes(11, getTipoBytes());
@@ -547,7 +547,7 @@ public final class Roveretoexplorer {
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(10, getUrlBytes());
+          .computeBytesSize(10, getWebsiteUrlBytes());
       }
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
         size += com.google.protobuf.CodedOutputStream
@@ -708,7 +708,7 @@ public final class Roveretoexplorer {
           indirizzoBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000100);
-        url_ = "";
+        websiteUrl_ = "";
         bitField0_ = (bitField0_ & ~0x00000200);
         tipo_ = "";
         bitField0_ = (bitField0_ & ~0x00000400);
@@ -797,7 +797,7 @@ public final class Roveretoexplorer {
         if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
           to_bitField0_ |= 0x00000200;
         }
-        result.url_ = url_;
+        result.websiteUrl_ = websiteUrl_;
         if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
           to_bitField0_ |= 0x00000400;
         }
@@ -853,8 +853,8 @@ public final class Roveretoexplorer {
         if (other.hasIndirizzo()) {
           mergeIndirizzo(other.getIndirizzo());
         }
-        if (other.hasUrl()) {
-          setUrl(other.getUrl());
+        if (other.hasWebsiteUrl()) {
+          setWebsiteUrl(other.getWebsiteUrl());
         }
         if (other.hasTipo()) {
           setTipo(other.getTipo());
@@ -886,7 +886,7 @@ public final class Roveretoexplorer {
           
           return false;
         }
-        if (!hasUrl()) {
+        if (!hasWebsiteUrl()) {
           
           return false;
         }
@@ -979,7 +979,7 @@ public final class Roveretoexplorer {
             }
             case 82: {
               bitField0_ |= 0x00000200;
-              url_ = input.readBytes();
+              websiteUrl_ = input.readBytes();
               break;
             }
             case 90: {
@@ -1321,39 +1321,39 @@ public final class Roveretoexplorer {
         return indirizzoBuilder_;
       }
       
-      // required string url = 10;
-      private java.lang.Object url_ = "";
-      public boolean hasUrl() {
+      // required string websiteUrl = 10;
+      private java.lang.Object websiteUrl_ = "";
+      public boolean hasWebsiteUrl() {
         return ((bitField0_ & 0x00000200) == 0x00000200);
       }
-      public String getUrl() {
-        java.lang.Object ref = url_;
+      public String getWebsiteUrl() {
+        java.lang.Object ref = websiteUrl_;
         if (!(ref instanceof String)) {
           String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-          url_ = s;
+          websiteUrl_ = s;
           return s;
         } else {
           return (String) ref;
         }
       }
-      public Builder setUrl(String value) {
+      public Builder setWebsiteUrl(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000200;
-        url_ = value;
+        websiteUrl_ = value;
         onChanged();
         return this;
       }
-      public Builder clearUrl() {
+      public Builder clearWebsiteUrl() {
         bitField0_ = (bitField0_ & ~0x00000200);
-        url_ = getDefaultInstance().getUrl();
+        websiteUrl_ = getDefaultInstance().getWebsiteUrl();
         onChanged();
         return this;
       }
-      void setUrl(com.google.protobuf.ByteString value) {
+      void setWebsiteUrl(com.google.protobuf.ByteString value) {
         bitField0_ |= 0x00000200;
-        url_ = value;
+        websiteUrl_ = value;
         onChanged();
       }
       
@@ -2060,16 +2060,16 @@ public final class Roveretoexplorer {
     java.lang.String[] descriptorData = {
       "\n\026roveretoexplorer.proto\022?eu.trentorise." +
       "smartcampus.service.roveretoexplorer.dat" +
-      "a.message\032\ncore.proto\"\246\002\n\016EventoRovereto" +
+      "a.message\032\ncore.proto\"\255\002\n\016EventoRovereto" +
       "\022\n\n\002id\030\001 \002(\t\022\016\n\006titolo\030\002 \002(\t\022\023\n\013descrizi" +
       "one\030\003 \002(\t\022\r\n\005image\030\004 \001(\t\022\020\n\010fromTime\030\005 \001" +
       "(\003\022\016\n\006toTime\030\006 \001(\003\022\013\n\003lat\030\007 \001(\001\022\013\n\003lon\030\010" +
       " \001(\001\022[\n\tindirizzo\030\t \002(\0132H.eu.trentorise." +
       "smartcampus.service.roveretoexplorer.dat" +
-      "a.message.Address\022\013\n\003url\030\n \002(\t\022\014\n\004tipo\030\013" +
-      " \002(\t\022\r\n\005fonte\030\014 \002(\t\022\021\n\twhenWhere\030\r \002(\t\"6",
-      "\n\007Address\022\r\n\005place\030\001 \001(\t\022\016\n\006street\030\002 \001(\t" +
-      "\022\014\n\004town\030\003 \001(\t"
+      "a.message.Address\022\022\n\nwebsiteUrl\030\n \002(\t\022\014\n" +
+      "\004tipo\030\013 \002(\t\022\r\n\005fonte\030\014 \002(\t\022\021\n\twhenWhere\030",
+      "\r \002(\t\"6\n\007Address\022\r\n\005place\030\001 \001(\t\022\016\n\006stree" +
+      "t\030\002 \001(\t\022\014\n\004town\030\003 \001(\t"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2081,7 +2081,7 @@ public final class Roveretoexplorer {
           internal_static_eu_trentorise_smartcampus_service_roveretoexplorer_data_message_EventoRovereto_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_eu_trentorise_smartcampus_service_roveretoexplorer_data_message_EventoRovereto_descriptor,
-              new java.lang.String[] { "Id", "Titolo", "Descrizione", "Image", "FromTime", "ToTime", "Lat", "Lon", "Indirizzo", "Url", "Tipo", "Fonte", "WhenWhere", },
+              new java.lang.String[] { "Id", "Titolo", "Descrizione", "Image", "FromTime", "ToTime", "Lat", "Lon", "Indirizzo", "WebsiteUrl", "Tipo", "Fonte", "WhenWhere", },
               eu.trentorise.smartcampus.service.roveretoexplorer.data.message.Roveretoexplorer.EventoRovereto.class,
               eu.trentorise.smartcampus.service.roveretoexplorer.data.message.Roveretoexplorer.EventoRovereto.Builder.class);
           internal_static_eu_trentorise_smartcampus_service_roveretoexplorer_data_message_Address_descriptor =
