@@ -13,34 +13,45 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  ******************************************************************************/
-package eu.trentorise.smartcampus.dt.model;
+package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.mvel2.optimizers.impl.refl.nodes.ArrayLength;
 
-public class ServiceDataObject  {
+import eu.trentorise.smartcampus.presentation.data.BasicObject;
+
+public class ReviewObject  {
 
 	protected String id;
 	
-	protected Map<String, Object> data;
+	protected List<Review> reviews;
 
-	public ServiceDataObject() {
+	public ReviewObject() {
 	}
 	
-	public ServiceDataObject(String id) {
+	public ReviewObject(String id) {
 		this.id = id;
-	}
-
-	public Map<String, Object> getData() {
-		return data;
-	}
-
-	public void setData(Map<String, Object> data) {
-		this.data = data;
+		reviews = new ArrayList<Review>();
 	}
 	
+	public List<Review> getReviews() {
+		return reviews;
+	}
 
+	public void setReviews(List<Review> reviews) {
+		this.reviews = reviews;
+	}
 
+	public String getParentId() {
+		return id;
+	}
+
+	public void setParentId(String parentId) {
+		this.id = parentId;
+	}
+	
 	
 	
 }

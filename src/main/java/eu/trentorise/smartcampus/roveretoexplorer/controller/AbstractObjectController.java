@@ -31,9 +31,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.geo.Circle;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ObjectFilter;
 import eu.trentorise.smartcampus.data.GeoTimeObjectSyncStorage;
-import eu.trentorise.smartcampus.dt.model.BaseDTObject;
-import eu.trentorise.smartcampus.dt.model.ObjectFilter;
 import eu.trentorise.smartcampus.profileservice.BasicProfileService;
 import eu.trentorise.smartcampus.profileservice.ProfileServiceException;
 import eu.trentorise.smartcampus.profileservice.model.BasicProfile;

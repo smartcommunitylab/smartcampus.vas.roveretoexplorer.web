@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2012-2014 Trento RISE
+ * Copyright 2012-2013 Trento RISE
  * 
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,45 +13,35 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  ******************************************************************************/
-package eu.trentorise.smartcampus.dt.model;
+package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
-import org.mvel2.optimizers.impl.refl.nodes.ArrayLength;
+public class Rating implements Serializable {
+	private static final long serialVersionUID = 8439956580747593928L;
 
-import eu.trentorise.smartcampus.presentation.data.BasicObject;
-
-public class ReviewObject  {
-
-	protected String id;
+	private String userId;
+	private int value;
 	
-	protected List<Review> reviews;
-
-	public ReviewObject() {
+	public Rating() {
+		super();
 	}
-	
-	public ReviewObject(String id) {
-		this.id = id;
-		reviews = new ArrayList<Review>();
+	public Rating(String user, Integer value) {
+		this.userId = user;
+		this.value = value;
 	}
-	
-	public List<Review> getReviews() {
-		return reviews;
+	public String getUserId() {
+		return userId;
 	}
-
-	public void setReviews(List<Review> reviews) {
-		this.reviews = reviews;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
-
-	public String getParentId() {
-		return id;
+	public int getValue() {
+		return value;
 	}
-
-	public void setParentId(String parentId) {
-		this.id = parentId;
+	public void setValue(int value) {
+		this.value = value;
 	}
-	
 	
 	
 }

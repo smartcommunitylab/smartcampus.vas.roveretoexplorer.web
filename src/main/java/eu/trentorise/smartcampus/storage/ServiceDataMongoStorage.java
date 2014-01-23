@@ -17,7 +17,7 @@ package eu.trentorise.smartcampus.storage;
 
 import org.springframework.data.mongodb.core.MongoOperations;
 
-import eu.trentorise.smartcampus.dt.model.ServiceDataObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ServiceDataObject;
 import eu.trentorise.smartcampus.presentation.common.exception.NotFoundException;
 
 public class ServiceDataMongoStorage {

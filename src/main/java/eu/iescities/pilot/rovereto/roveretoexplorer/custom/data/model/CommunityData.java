@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  ******************************************************************************/
-package eu.trentorise.smartcampus.dt.model;
+package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model;
 
 import java.util.ArrayList;
 import java.util.Collections;

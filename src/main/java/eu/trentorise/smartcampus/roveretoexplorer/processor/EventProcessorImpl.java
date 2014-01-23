@@ -38,9 +38,9 @@ import com.google.common.collect.Maps;
 import com.google.protobuf.ByteString;
 import com.googlecode.protobuf.format.JsonFormat;
 
-import eu.trentorise.smartcampus.dt.model.Address;
-import eu.trentorise.smartcampus.dt.model.ExplorerObject;
-import eu.trentorise.smartcampus.dt.model.ServiceDataObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.Address;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ServiceDataObject;
 import eu.trentorise.smartcampus.presentation.common.exception.NotFoundException;
 import eu.trentorise.smartcampus.presentation.storage.sync.BasicObjectSyncStorage;
 import eu.trentorise.smartcampus.roveretoexplorer.listener.Subscriber;

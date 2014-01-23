@@ -19,7 +19,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-import eu.trentorise.smartcampus.dt.model.ReviewObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ReviewObject;
 import eu.trentorise.smartcampus.presentation.common.exception.NotFoundException;
 
 public class ReviewsMongoStorage {
