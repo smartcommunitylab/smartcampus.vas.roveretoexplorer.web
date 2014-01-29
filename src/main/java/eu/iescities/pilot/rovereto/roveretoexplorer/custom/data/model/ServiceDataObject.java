@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2012-2013 Trento RISE
+ * Copyright 2012-2014 Trento RISE
  * 
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,35 +13,34 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  ******************************************************************************/
-package eu.trentorise.smartcampus.dt.model;
+package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model;
 
-import java.io.Serializable;
+import java.util.Map;
 
-public class Rating implements Serializable {
-	private static final long serialVersionUID = 8439956580747593928L;
 
-	private String userId;
-	private int value;
+public class ServiceDataObject  {
+
+	protected String id;
 	
-	public Rating() {
-		super();
+	protected Map<String, Object> data;
+
+	public ServiceDataObject() {
 	}
-	public Rating(String user, Integer value) {
-		this.userId = user;
-		this.value = value;
+	
+	public ServiceDataObject(String id) {
+		this.id = id;
 	}
-	public String getUserId() {
-		return userId;
+
+	public Map<String, Object> getData() {
+		return data;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+
+	public void setData(Map<String, Object> data) {
+		this.data = data;
 	}
-	public int getValue() {
-		return value;
-	}
-	public void setValue(int value) {
-		this.value = value;
-	}
+	
+
+
 	
 	
 }

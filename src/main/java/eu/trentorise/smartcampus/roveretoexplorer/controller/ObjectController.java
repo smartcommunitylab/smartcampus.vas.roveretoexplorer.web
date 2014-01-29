@@ -30,12 +30,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import eu.trentorise.smartcampus.dt.model.BaseDTObject;
-import eu.trentorise.smartcampus.dt.model.CommunityData;
-import eu.trentorise.smartcampus.dt.model.ExplorerObject;
-import eu.trentorise.smartcampus.dt.model.Rating;
-import eu.trentorise.smartcampus.dt.model.Review;
-import eu.trentorise.smartcampus.dt.model.ReviewObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.CommunityData;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.Rating;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.Review;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ReviewObject;
 import eu.trentorise.smartcampus.presentation.common.exception.NotFoundException;
 import eu.trentorise.smartcampus.presentation.storage.sync.BasicObjectSyncStorage;
 import eu.trentorise.smartcampus.profileservice.model.BasicProfile;

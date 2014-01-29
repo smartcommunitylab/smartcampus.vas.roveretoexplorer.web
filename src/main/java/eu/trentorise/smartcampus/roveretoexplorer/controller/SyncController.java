@@ -33,8 +33,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import eu.trentorise.smartcampus.dt.model.BaseDTObject;
-import eu.trentorise.smartcampus.dt.model.ExplorerObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.trentorise.smartcampus.presentation.common.util.Util;
 import eu.trentorise.smartcampus.presentation.data.BasicObject;
 import eu.trentorise.smartcampus.presentation.data.SyncData;

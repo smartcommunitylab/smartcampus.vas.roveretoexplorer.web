@@ -28,7 +28,7 @@ import org.springframework.data.mongodb.core.query.Query;
 
 import com.mongodb.BasicDBObjectBuilder;
 
-import eu.trentorise.smartcampus.dt.model.BaseDTObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 import eu.trentorise.smartcampus.presentation.common.exception.DataException;
 import eu.trentorise.smartcampus.presentation.data.BasicObject;
 import eu.trentorise.smartcampus.presentation.storage.sync.mongo.GenericObjectSyncMongoStorage;

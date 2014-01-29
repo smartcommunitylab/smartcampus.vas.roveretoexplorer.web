@@ -21,7 +21,7 @@ import java.util.SortedMap;
 
 import org.springframework.data.mongodb.core.geo.Circle;
 
-import eu.trentorise.smartcampus.dt.model.BaseDTObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 import eu.trentorise.smartcampus.presentation.common.exception.DataException;
 import eu.trentorise.smartcampus.presentation.storage.sync.BasicObjectSyncStorage;
 

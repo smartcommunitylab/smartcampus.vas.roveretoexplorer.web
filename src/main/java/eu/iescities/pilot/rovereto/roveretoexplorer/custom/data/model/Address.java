@@ -1,4 +1,4 @@
-package eu.trentorise.smartcampus.dt.model;
+package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model;
 
 public class Address {
 	private String luogo = null;
