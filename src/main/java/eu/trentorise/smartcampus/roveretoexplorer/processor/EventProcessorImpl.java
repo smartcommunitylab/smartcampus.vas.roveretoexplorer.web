@@ -180,7 +180,7 @@ public class EventProcessorImpl implements ServiceBusListener {
 			explorerObject.setFromTime((Long)newMap.get("fromTime"));
 		}		
 		if (only.contains("toTime")) {
-			explorerObject.setFromTime((Long)newMap.get("toTime"));
+			explorerObject.setToTime((Long)newMap.get("toTime"));
 		}				
 		if (only.contains("whenWhere")) {
 			explorerObject.setWhenWhere((String)newMap.get("whenWhere"));
