@@ -280,14 +280,14 @@ public class ObjectController extends AbstractObjectController {
 				return null;
 			}
 			
-			newObject.setCommunityData(oldObject.getCommunityData());
+//			newObject.setCommunityData(oldObject.getCommunityData());
 
 			// TODO: enable
-//			if (oldObject.getVersion() > newObject.getVersion()) {
-//				logger.error("Trying to edit a more recent object version");
-//				response.setStatus(HttpServletResponse.SC_CONFLICT);
-//				return null;
-//			}
+			if (oldObject.getVersion() > newObject.getVersion()) {
+				logger.error("Trying to edit a more recent object version");
+				response.setStatus(HttpServletResponse.SC_CONFLICT);
+				return null;
+			}
 
 			syncStorage.storeObject(newObject);
 
