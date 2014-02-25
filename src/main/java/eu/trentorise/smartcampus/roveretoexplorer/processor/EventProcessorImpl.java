@@ -95,7 +95,7 @@ public class EventProcessorImpl implements ServiceBusListener {
 		customMap = new TreeMap<String, Object>();
 		Map<String, Object> subMap = new TreeMap<String, Object>();
 		subMap.put("phone", new ArrayList<String>());
-		subMap.put("email", "");
+		subMap.put("email", new ArrayList<String>());
 		subMap.put("fax", "");
 //		subMap.put("facebook", "");
 //		subMap.put("twitter", "");
