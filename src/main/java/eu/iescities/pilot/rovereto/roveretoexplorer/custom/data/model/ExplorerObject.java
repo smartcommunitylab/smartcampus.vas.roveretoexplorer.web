@@ -28,7 +28,7 @@ public class ExplorerObject extends BaseDTObject {
 	private String whenWhere;
 	private String image;
 	private String origin;
-	private String category;
+	private List<String> category;
 	private Map<String,Object> contacts;
 	
   private String websiteUrl = null;
@@ -65,11 +65,11 @@ public class ExplorerObject extends BaseDTObject {
 		this.origin = source;
 	}
 
-	public String getCategory() {
+	public List<String> getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(List<String> category) {
 		this.category = category;
 	}
 

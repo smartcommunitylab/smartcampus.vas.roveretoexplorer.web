@@ -52,9 +52,10 @@ public final class Roveretoexplorer {
     boolean hasWebsiteUrl();
     String getWebsiteUrl();
     
-    // required string tipo = 11;
-    boolean hasTipo();
-    String getTipo();
+    // repeated string tipo = 11;
+    java.util.List<String> getTipoList();
+    int getTipoCount();
+    String getTipo(int index);
     
     // required string fonte = 12;
     boolean hasFonte();
@@ -306,43 +307,25 @@ public final class Roveretoexplorer {
       }
     }
     
-    // required string tipo = 11;
+    // repeated string tipo = 11;
     public static final int TIPO_FIELD_NUMBER = 11;
-    private java.lang.Object tipo_;
-    public boolean hasTipo() {
-      return ((bitField0_ & 0x00000400) == 0x00000400);
+    private com.google.protobuf.LazyStringList tipo_;
+    public java.util.List<String>
+        getTipoList() {
+      return tipo_;
     }
-    public String getTipo() {
-      java.lang.Object ref = tipo_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          tipo_ = s;
-        }
-        return s;
-      }
+    public int getTipoCount() {
+      return tipo_.size();
     }
-    private com.google.protobuf.ByteString getTipoBytes() {
-      java.lang.Object ref = tipo_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        tipo_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public String getTipo(int index) {
+      return tipo_.get(index);
     }
     
     // required string fonte = 12;
     public static final int FONTE_FIELD_NUMBER = 12;
     private java.lang.Object fonte_;
     public boolean hasFonte() {
-      return ((bitField0_ & 0x00000800) == 0x00000800);
+      return ((bitField0_ & 0x00000400) == 0x00000400);
     }
     public String getFonte() {
       java.lang.Object ref = fonte_;
@@ -374,7 +357,7 @@ public final class Roveretoexplorer {
     public static final int WHENWHERE_FIELD_NUMBER = 13;
     private java.lang.Object whenWhere_;
     public boolean hasWhenWhere() {
-      return ((bitField0_ & 0x00001000) == 0x00001000);
+      return ((bitField0_ & 0x00000800) == 0x00000800);
     }
     public String getWhenWhere() {
       java.lang.Object ref = whenWhere_;
@@ -413,7 +396,7 @@ public final class Roveretoexplorer {
       lon_ = 0D;
       indirizzo_ = eu.trentorise.smartcampus.service.roveretoexplorer.data.message.Roveretoexplorer.Address.getDefaultInstance();
       websiteUrl_ = "";
-      tipo_ = "";
+      tipo_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       fonte_ = "";
       whenWhere_ = "";
     }
@@ -439,10 +422,6 @@ public final class Roveretoexplorer {
         return false;
       }
       if (!hasWebsiteUrl()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasTipo()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -491,13 +470,13 @@ public final class Roveretoexplorer {
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         output.writeBytes(10, getWebsiteUrlBytes());
       }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        output.writeBytes(11, getTipoBytes());
+      for (int i = 0; i < tipo_.size(); i++) {
+        output.writeBytes(11, tipo_.getByteString(i));
       }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
         output.writeBytes(12, getFonteBytes());
       }
-      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
         output.writeBytes(13, getWhenWhereBytes());
       }
       getUnknownFields().writeTo(output);
@@ -549,15 +528,20 @@ public final class Roveretoexplorer {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(10, getWebsiteUrlBytes());
       }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(11, getTipoBytes());
+      {
+        int dataSize = 0;
+        for (int i = 0; i < tipo_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(tipo_.getByteString(i));
+        }
+        size += dataSize;
+        size += 1 * getTipoList().size();
       }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(12, getFonteBytes());
       }
-      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(13, getWhenWhereBytes());
       }
@@ -710,7 +694,7 @@ public final class Roveretoexplorer {
         bitField0_ = (bitField0_ & ~0x00000100);
         websiteUrl_ = "";
         bitField0_ = (bitField0_ & ~0x00000200);
-        tipo_ = "";
+        tipo_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000400);
         fonte_ = "";
         bitField0_ = (bitField0_ & ~0x00000800);
@@ -798,16 +782,18 @@ public final class Roveretoexplorer {
           to_bitField0_ |= 0x00000200;
         }
         result.websiteUrl_ = websiteUrl_;
-        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
-          to_bitField0_ |= 0x00000400;
+        if (((bitField0_ & 0x00000400) == 0x00000400)) {
+          tipo_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              tipo_);
+          bitField0_ = (bitField0_ & ~0x00000400);
         }
         result.tipo_ = tipo_;
         if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
-          to_bitField0_ |= 0x00000800;
+          to_bitField0_ |= 0x00000400;
         }
         result.fonte_ = fonte_;
         if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
-          to_bitField0_ |= 0x00001000;
+          to_bitField0_ |= 0x00000800;
         }
         result.whenWhere_ = whenWhere_;
         result.bitField0_ = to_bitField0_;
@@ -856,8 +842,15 @@ public final class Roveretoexplorer {
         if (other.hasWebsiteUrl()) {
           setWebsiteUrl(other.getWebsiteUrl());
         }
-        if (other.hasTipo()) {
-          setTipo(other.getTipo());
+        if (!other.tipo_.isEmpty()) {
+          if (tipo_.isEmpty()) {
+            tipo_ = other.tipo_;
+            bitField0_ = (bitField0_ & ~0x00000400);
+          } else {
+            ensureTipoIsMutable();
+            tipo_.addAll(other.tipo_);
+          }
+          onChanged();
         }
         if (other.hasFonte()) {
           setFonte(other.getFonte());
@@ -887,10 +880,6 @@ public final class Roveretoexplorer {
           return false;
         }
         if (!hasWebsiteUrl()) {
-          
-          return false;
-        }
-        if (!hasTipo()) {
           
           return false;
         }
@@ -983,8 +972,8 @@ public final class Roveretoexplorer {
               break;
             }
             case 90: {
-              bitField0_ |= 0x00000400;
-              tipo_ = input.readBytes();
+              ensureTipoIsMutable();
+              tipo_.add(input.readBytes());
               break;
             }
             case 98: {
@@ -1357,39 +1346,59 @@ public final class Roveretoexplorer {
         onChanged();
       }
       
-      // required string tipo = 11;
-      private java.lang.Object tipo_ = "";
-      public boolean hasTipo() {
-        return ((bitField0_ & 0x00000400) == 0x00000400);
+      // repeated string tipo = 11;
+      private com.google.protobuf.LazyStringList tipo_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureTipoIsMutable() {
+        if (!((bitField0_ & 0x00000400) == 0x00000400)) {
+          tipo_ = new com.google.protobuf.LazyStringArrayList(tipo_);
+          bitField0_ |= 0x00000400;
+         }
       }
-      public String getTipo() {
-        java.lang.Object ref = tipo_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-          tipo_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
+      public java.util.List<String>
+          getTipoList() {
+        return java.util.Collections.unmodifiableList(tipo_);
       }
-      public Builder setTipo(String value) {
+      public int getTipoCount() {
+        return tipo_.size();
+      }
+      public String getTipo(int index) {
+        return tipo_.get(index);
+      }
+      public Builder setTipo(
+          int index, String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000400;
-        tipo_ = value;
+  ensureTipoIsMutable();
+        tipo_.set(index, value);
+        onChanged();
+        return this;
+      }
+      public Builder addTipo(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureTipoIsMutable();
+        tipo_.add(value);
+        onChanged();
+        return this;
+      }
+      public Builder addAllTipo(
+          java.lang.Iterable<String> values) {
+        ensureTipoIsMutable();
+        super.addAll(values, tipo_);
         onChanged();
         return this;
       }
       public Builder clearTipo() {
+        tipo_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000400);
-        tipo_ = getDefaultInstance().getTipo();
         onChanged();
         return this;
       }
-      void setTipo(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000400;
-        tipo_ = value;
+      void addTipo(com.google.protobuf.ByteString value) {
+        ensureTipoIsMutable();
+        tipo_.add(value);
         onChanged();
       }
       
@@ -2067,7 +2076,7 @@ public final class Roveretoexplorer {
       " \001(\001\022[\n\tindirizzo\030\t \002(\0132H.eu.trentorise." +
       "smartcampus.service.roveretoexplorer.dat" +
       "a.message.Address\022\022\n\nwebsiteUrl\030\n \002(\t\022\014\n" +
-      "\004tipo\030\013 \002(\t\022\r\n\005fonte\030\014 \002(\t\022\021\n\twhenWhere\030",
+      "\004tipo\030\013 \003(\t\022\r\n\005fonte\030\014 \002(\t\022\021\n\twhenWhere\030",
       "\r \002(\t\"6\n\007Address\022\r\n\005place\030\001 \001(\t\022\016\n\006stree" +
       "t\030\002 \001(\t\022\014\n\004town\030\003 \001(\t"
     };

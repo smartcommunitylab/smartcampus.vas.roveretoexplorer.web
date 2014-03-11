@@ -186,7 +186,7 @@ public class EventProcessorImpl implements ServiceBusListener {
 			explorerObject.setWhenWhere((String)newMap.get("whenWhere"));
 		}					
 		if (only.contains("tipo")) {
-			explorerObject.setCategory((String)newMap.get("tipo"));
+			explorerObject.setCategory((List)newMap.get("tipo"));
 		}					
 		if (only.contains("fonte")) {
 			explorerObject.setOrigin((String)newMap.get("fonte"));
