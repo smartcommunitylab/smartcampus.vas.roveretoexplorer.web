@@ -16,6 +16,7 @@
 package eu.trentorise.smartcampus.roveretoexplorer.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -239,6 +240,10 @@ public class ObjectController extends AbstractObjectController {
 			BaseDTObject obj = (BaseDTObject) syncStorage.getObjectById(id);
 
 			Set<String> attending = obj.getCommunityData().getAttending();
+			if (attending == null) {
+				attending = new HashSet<String>();
+				obj.getCommunityData().setAttending(attending);
+			}
 			if (attend) {
 				attending.add(userId);
 			} else {
@@ -248,10 +253,10 @@ public class ObjectController extends AbstractObjectController {
 
 			syncStorage.storeObject(obj);
 		} catch (NotFoundException e) {
-			logger.error("Failed to rate object with id " + id + " as user " + userId + ": " + e.getMessage());
+			logger.error("Failed to attend object with id " + id + " as user " + userId + ": " + e.getMessage());
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		} catch (Exception e) {
-			logger.error("Failed to rate object with id " + id + " as user " + userId + ": " + e.getMessage());
+			logger.error("Failed to attend object with id " + id + " as user " + userId + ": " + e.getMessage());
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
