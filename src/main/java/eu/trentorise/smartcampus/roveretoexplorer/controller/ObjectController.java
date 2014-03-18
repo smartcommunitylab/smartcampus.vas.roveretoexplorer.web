@@ -195,20 +195,23 @@ public class ObjectController extends AbstractObjectController {
 				reviews = new ReviewObject(parentId);
 			}
 
-			int pos = -1, i = 0;
-
-			for (Review oldReview : reviews.getReviews()) {
-				if (userId.equals(oldReview.getUserId())) {
-					pos = i;
-					break;
-				}
-				i++;
-			}
-			if (pos < 0) {
-				reviews.getReviews().add(review);
-			} else {
-				reviews.getReviews().set(pos, review);
-			}
+//			int pos = -1, i = 0;
+//
+//			for (Review oldReview : reviews.getReviews()) {
+//				if (userId.equals(oldReview.getUserId())) {
+//					pos = i;
+//					break;
+//				}
+//				i++;
+//			}
+//			if (pos < 0) {
+//				reviews.getReviews().add(review);
+//			} else {
+//				reviews.getReviews().set(pos, review);
+//			}
+			
+			reviews.getReviews().add(review);
+			
 			reviewStorage.storeObject(reviews);
 			syncStorage.storeObject(obj);
 			obj.filterUserData(userId);
