@@ -17,6 +17,7 @@ package eu.trentorise.smartcampus.roveretoexplorer.controller;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,6 +52,13 @@ public class ObjectController extends AbstractObjectController {
 	@Autowired
 	private ReviewsMongoStorage reviewStorage;
 
+	
+	@RequestMapping(method = RequestMethod.GET, value="/events")
+	public @ResponseBody List<ExplorerObject> getAllEventObject(HttpServletRequest request) throws Exception {
+		List<ExplorerObject> list = getAllObject(request, ExplorerObject.class);
+		return list;
+	}
+	
 	@RequestMapping(value = "/social/rate/{id}", method = RequestMethod.PUT)
 	public void rate(HttpServletResponse response, @RequestParam String rating, @PathVariable String id) {
 		String userId = null;
