@@ -21,24 +21,57 @@ import it.sayservice.platform.client.ServiceBusClient;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 public class Subscriber {
 
 	public static final String GET_EVENTI_ROVERETO = "GetEventiRovereto";
 	public static final String ROVERETO_EXPLORER = "smartcampus.service.roveretoexplorer";
+	
+	public static final String GET_EVENTI_FB = "GetEvents";
+	public static final String FB_EVENTS = "eu.trentorise.smartcampus.services.fb.events.FacebookEvents";	
 
 	private Log logger = LogFactory.getLog(getClass());
+	
+	@Autowired
+	@Value("${fb.events}")
+	private String fbEvents;	
+	
+	@Autowired
+	@Value("${fb.token}")
+	private String fbToken;		
+	
+	@Autowired
+	private ServiceBusClient client;
 
-	public Subscriber(ServiceBusClient client) {
+	public Subscriber() {
+	}
+	
+	@PostConstruct
+	public void init() {
 		try {
 			System.out.println("SUBSCRIBE");
 			Map<String, Object> params = new TreeMap<String, Object>();
 			client.subscribeService(ROVERETO_EXPLORER, GET_EVENTI_ROVERETO, params);
+
+			params.put("token", fbToken);
+			params.put("overrideLocation", "");
+			
+			String ids[] = fbEvents.split(",");
+			for (String id: ids) {
+				params.put("source", id);
+				client.subscribeService(FB_EVENTS, GET_EVENTI_FB, params);	
+			}
+			
 			
 		} catch (InvocationException e) {
 			logger.error("Failed to subscribe for service events: " + e.getMessage());
-		}
+		}		
 	}
+	
 }
