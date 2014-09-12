@@ -23,9 +23,9 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.geo.Circle;
@@ -45,7 +45,7 @@ public class AbstractObjectController {
 	@Autowired
 	protected GeoTimeObjectSyncStorage storage;
 
-	protected Log logger = LogFactory.getLog(this.getClass());
+	protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	@Value("${aacURL}")

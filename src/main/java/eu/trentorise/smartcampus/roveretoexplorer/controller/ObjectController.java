@@ -52,7 +52,6 @@ public class ObjectController extends AbstractObjectController {
 	@Autowired
 	private ReviewsMongoStorage reviewStorage;
 
-	
 	@RequestMapping(method = RequestMethod.GET, value="/events")
 	public @ResponseBody List<ExplorerObject> getAllEventObject(HttpServletRequest request) throws Exception {
 		List<ExplorerObject> list = getAllObject(request, ExplorerObject.class);
@@ -276,9 +275,10 @@ public class ObjectController extends AbstractObjectController {
 	
 	@RequestMapping(value = "/social/edit", method = RequestMethod.POST)
 	public @ResponseBody
-	CommunityData edit(HttpServletRequest request, HttpServletResponse response, @RequestBody ExplorerObject newObject) {
+	ExplorerObject edit(HttpServletRequest request, HttpServletResponse response, @RequestBody ExplorerObject newObject) {
 		String userId = null;
 		BasicProfile bp = null;
+		logger.debug("Editing object {}: {}",newObject.getId(), newObject.getTitle());
 		try {
 			try {
 				bp = getUser();
@@ -298,21 +298,24 @@ public class ObjectController extends AbstractObjectController {
 			
 //			newObject.setCommunityData(oldObject.getCommunityData());
 
+			
+		
+			logger.debug("Editing object versions: new {} vs old {}", newObject.getVersion(), oldObject.getVersion());
 			// TODO: enable
 			if (oldObject.getVersion() > newObject.getVersion()) {
 				logger.error("Trying to edit a more recent object version");
 				response.setStatus(HttpServletResponse.SC_CONFLICT);
 				return null;
 			}
-
 			syncStorage.storeObject(newObject);
+			return (ExplorerObject)syncStorage.getObjectById(newObject.getId());
 
 		} catch (Exception e) {
 			logger.error("Failed to edit object: " + e.getMessage());
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
 		}
-		return null;
 	}
 
 	private String createAuthor(BasicProfile bp) {
