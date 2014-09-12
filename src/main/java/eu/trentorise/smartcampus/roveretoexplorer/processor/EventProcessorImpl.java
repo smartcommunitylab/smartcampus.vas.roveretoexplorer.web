@@ -45,6 +45,7 @@ import eu.trentorise.smartcampus.presentation.common.exception.NotFoundException
 import eu.trentorise.smartcampus.presentation.storage.sync.BasicObjectSyncStorage;
 import eu.trentorise.smartcampus.roveretoexplorer.listener.Subscriber;
 import eu.trentorise.smartcampus.service.roveretoexplorer.data.message.Roveretoexplorer.EventoRovereto;
+import eu.trentorise.smartcampus.services.fb.events.data.message.Events.Event;
 import eu.trentorise.smartcampus.storage.ServiceDataMongoStorage;
 
 //import eu.trentorise.smartcampus.dt.model.InfoObject;
@@ -53,13 +54,13 @@ public class EventProcessorImpl implements ServiceBusListener {
 
 	@Autowired
 	private BasicObjectSyncStorage storage;
-	
+
 	@Autowired
 	private ServiceDataMongoStorage serviceDataStorage;
 
 	@Autowired
 	ServiceBusClient client;
-	
+
 	private Map<String, Object> customMap;
 
 	private static Log logger = LogFactory.getLog(EventProcessorImpl.class);
@@ -67,7 +68,7 @@ public class EventProcessorImpl implements ServiceBusListener {
 	public EventProcessorImpl() {
 		buildCustomMap();
 	}
-	
+
 	@Override
 	public void onServiceEvents(String serviceId, String methodName, String subscriptionId, List<ByteString> data) {
 		System.out.println(new Date() + " -> " + methodName + "@" + serviceId);
@@ -75,30 +76,55 @@ public class EventProcessorImpl implements ServiceBusListener {
 			if (Subscriber.ROVERETO_EXPLORER.equals(serviceId) || Subscriber.GET_EVENTI_ROVERETO.endsWith(serviceId)) {
 				updateEvents(data);
 			}
+			if (Subscriber.FB_EVENTS.equals(serviceId) || Subscriber.GET_EVENTI_FB.endsWith(serviceId)) {
+				updateFBEvents(data);
+			}
 
 		} catch (Exception e) {
 			logger.error("Error updating " + methodName);
 			e.printStackTrace();
 		}
 	}
-	
+
 	private Map<String, Object> updateEventsSources(EventoRovereto er) throws Exception {
-			String json = JsonFormat.printToString(er);
-			ObjectMapper mapper = new ObjectMapper();
-			Map<String, Object> newMap = mapper.readValue(json, Map.class);
-			newMap.putAll(customMap);
-			return newMap;
+		String json = JsonFormat.printToString(er);
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> newMap = mapper.readValue(json, Map.class);
+		newMap.putAll(customMap);
+		return newMap;
 	}
-	
-	
+
+	private Map<String, Object> updateEventsSources(Event ev) throws Exception {
+		Map<String, Object> newMap = new TreeMap<String, Object>();
+
+		newMap.put("descrizione", "<p>" + ev.getDescription() + "</p>");
+		newMap.put("titolo", ev.getName());
+		newMap.put("whenWhere", ev.getLocation());
+		newMap.put("fonte", ev.getOwner());
+		newMap.put("fromTime", ev.getStartTime());
+		if (ev.getEndTime() == 0) {
+			newMap.put("toTime", ev.getStartTime());	
+		} else {
+			newMap.put("toTime", ev.getEndTime());
+		}
+		newMap.put("facebookUrl", "http://www.facebook.com/" + ev.getId());
+
+		if (ev.hasPoi()) {
+			newMap.put("lat", (Double) ev.getPoi().getCoordinate().getLatitude());
+			newMap.put("lon", (Double) ev.getPoi().getCoordinate().getLongitude());
+		}
+
+		return newMap;
+	}
+
 	private void buildCustomMap() {
 		customMap = new TreeMap<String, Object>();
 		Map<String, Object> subMap = new TreeMap<String, Object>();
 		subMap.put("phone", new ArrayList<String>());
 		subMap.put("email", new ArrayList<String>());
 		subMap.put("fax", "");
-//		subMap.put("facebook", "");
-//		subMap.put("twitter", "");
+		// subMap.put("facebook", "");
+		// subMap.put("twitter", "");
 		customMap.put("contacts", subMap);
 	}
 
@@ -106,13 +132,13 @@ public class EventProcessorImpl implements ServiceBusListener {
 		for (ByteString bs : bsl) {
 			EventoRovereto er = EventoRovereto.parseFrom(bs);
 			Map<String, Object> newMap = updateEventsSources(er);
-			
+
 			String titolo = er.getTitolo();
 			String id = encode(Subscriber.GET_EVENTI_ROVERETO + "_" + titolo + "_" + er.getId());
 
 			ServiceDataObject oldServiceData = null;
 			Map<String, Object> oldMap = null;
-			
+
 			try {
 				oldServiceData = (ServiceDataObject) serviceDataStorage.getObjectById(id);
 			} catch (NotFoundException e) {}
@@ -121,17 +147,17 @@ public class EventProcessorImpl implements ServiceBusListener {
 				oldMap = oldServiceData.getData();
 			} else {
 				oldMap = new TreeMap<String, Object>();
-			}			
-			
+			}
+
 			ExplorerObject oldDtobj = null;
-			
+
 			try {
 				oldDtobj = (ExplorerObject) storage.getObjectById(id);
 			} catch (NotFoundException e) {}
 
 			ExplorerObject explorerObject = null;
 			if (oldDtobj == null) {
-				explorerObject	 = new ExplorerObject();
+				explorerObject = new ExplorerObject();
 				oldMap = new TreeMap<String, Object>();
 			} else {
 				explorerObject = oldDtobj;
@@ -142,14 +168,67 @@ public class EventProcessorImpl implements ServiceBusListener {
 
 			Set<String> diff = findDifferences(oldMap, newMap);
 			copySourceData(explorerObject, oldMap, newMap, diff);
-			
+
 			ServiceDataObject sdo = new ServiceDataObject(id);
 			sdo.setData(newMap);
 			serviceDataStorage.storeObject(sdo);
-			
+
 			if (!diff.isEmpty()) {
 				storage.storeObject(explorerObject);
-				System.out.println("CHANGED "  + titolo + ": " + id);
+				System.out.println("CHANGED " + titolo + ": " + id);
+			}
+		}
+
+	}
+
+	private void updateFBEvents(List<ByteString> bsl) throws Exception {
+		for (ByteString bs : bsl) {
+			Event er = Event.parseFrom(bs);
+			Map<String, Object> newMap = updateEventsSources(er);
+
+			String titolo = er.getName();
+			String id = encode(Subscriber.GET_EVENTI_FB + "_" + titolo + "_" + er.getId());
+
+			ServiceDataObject oldServiceData = null;
+			Map<String, Object> oldMap = null;
+
+			try {
+				oldServiceData = (ServiceDataObject) serviceDataStorage.getObjectById(id);
+			} catch (NotFoundException e) {}
+
+			if (oldServiceData != null) {
+				oldMap = oldServiceData.getData();
+			} else {
+				oldMap = new TreeMap<String, Object>();
+			}
+
+			ExplorerObject oldDtobj = null;
+
+			try {
+				oldDtobj = (ExplorerObject) storage.getObjectById(id);
+			} catch (NotFoundException e) {}
+
+			ExplorerObject explorerObject = null;
+			if (oldDtobj == null) {
+				explorerObject = new ExplorerObject();
+				oldMap = new TreeMap<String, Object>();
+			} else {
+				explorerObject = oldDtobj;
+			}
+			explorerObject.setType("Event");
+			explorerObject.setSource(Subscriber.FB_EVENTS);
+			explorerObject.setId(id);
+
+			Set<String> diff = findDifferences(oldMap, newMap);
+			copySourceData(explorerObject, oldMap, newMap, diff);
+
+			ServiceDataObject sdo = new ServiceDataObject(id);
+			sdo.setData(newMap);
+			serviceDataStorage.storeObject(sdo);
+
+			if (!diff.isEmpty()) {
+				storage.storeObject(explorerObject);
+				System.out.println("CHANGED " + titolo + ": " + id);
 			}
 		}
 
@@ -164,70 +243,71 @@ public class EventProcessorImpl implements ServiceBusListener {
 		diff.addAll(diffMap.entriesOnlyOnRight().keySet());
 		return diff;
 	}
-	
+
 	private void copySourceData(ExplorerObject explorerObject, Map<String, Object> oldMap, Map<String, Object> newMap, Set<String> only) {
 		if (only.contains("titolo")) {
-			explorerObject.setTitle((String)newMap.get("titolo"));
+			explorerObject.setTitle((String) newMap.get("titolo"));
 		}
 		if (only.contains("descrizione")) {
-			explorerObject.setDescription((String)newMap.get("descrizione"));
+			explorerObject.setDescription((String) newMap.get("descrizione"));
 		}
 		if (only.contains("lat") && only.contains("lon")) {
-		double loc[] = new double[] { (Double)newMap.get("lat"), (Double)newMap.get("lon") };
-		explorerObject.setLocation(loc);
+			double loc[] = new double[] { (Double) newMap.get("lat"), (Double) newMap.get("lon") };
+			explorerObject.setLocation(loc);
 		}
 		if (only.contains("fromTime")) {
-			explorerObject.setFromTime((Long)newMap.get("fromTime"));
-		}		
+			explorerObject.setFromTime((Long) newMap.get("fromTime"));
+		}
 		if (only.contains("toTime")) {
-			explorerObject.setToTime((Long)newMap.get("toTime"));
-		}				
+			explorerObject.setToTime((Long) newMap.get("toTime"));
+		}
 		if (only.contains("whenWhere")) {
-			explorerObject.setWhenWhere((String)newMap.get("whenWhere"));
-		}					
+			explorerObject.setWhenWhere((String) newMap.get("whenWhere"));
+		}
 		if (only.contains("tipo")) {
-			explorerObject.setCategory((List)newMap.get("tipo"));
-		}					
+			explorerObject.setCategory((List) newMap.get("tipo"));
+		}
 		if (only.contains("fonte")) {
-			explorerObject.setOrigin((String)newMap.get("fonte"));
-		}			
+			explorerObject.setOrigin((String) newMap.get("fonte"));
+		}
 		if (only.contains("image")) {
-			explorerObject.setImage((String)newMap.get("image"));
+			explorerObject.setImage((String) newMap.get("image"));
 		}
 		if (only.contains("websiteUrl")) {
-			explorerObject.setWebsiteUrl((String)newMap.get("websiteUrl"));
-		}				
-		if (only.contains("websiteUrl")) {
-			explorerObject.setWebsiteUrl((String)newMap.get("websiteUrl"));
-		}						
-		
+			explorerObject.setWebsiteUrl((String) newMap.get("websiteUrl"));
+		}
+		if (only.contains("facebookUrl")) {
+			explorerObject.setFacebookUrl((String) newMap.get("facebookUrl"));
+		}		
+
+
 		// TODO check different fields?
-		
+
 		if (only.contains("indirizzo")) {
-			Map nMap = (Map)newMap.get("indirizzo");
-			Set<String> diff = findDifferences((Map)oldMap.get("indirizzo"), nMap);
+			Map nMap = (Map) newMap.get("indirizzo");
+			Set<String> diff = findDifferences((Map) oldMap.get("indirizzo"), nMap);
 			Address address = explorerObject.getAddress();
 			if (address == null) {
 				address = new Address();
 			}
 			if (diff.contains("place")) {
-				address.setLuogo((String)nMap.get("place"));
+				address.setLuogo((String) nMap.get("place"));
 			}
 			if (diff.contains("street")) {
-				address.setVia((String)nMap.get("street"));
+				address.setVia((String) nMap.get("street"));
 			}
 			if (diff.contains("town")) {
-				address.setCitta((String)nMap.get("town"));
-			}			
+				address.setCitta((String) nMap.get("town"));
+			}
 			explorerObject.setAddress(address);
-		}				
+		}
 		if (only.contains("contacts")) {
-//			explorerObject.setContacts((Map)newMap.get("contacts"));
-			explorerObject.setContacts(updateMap(explorerObject.getContacts(), (Map)oldMap.get("indirizzo"), (Map)newMap.get("contacts")));
-		}					
-		
+			// explorerObject.setContacts((Map)newMap.get("contacts"));
+			explorerObject.setContacts(updateMap(explorerObject.getContacts(), (Map) oldMap.get("indirizzo"), (Map) newMap.get("contacts")));
+		}
+
 	}
-	
+
 	private Map<String, Object> updateMap(Map<String, Object> dtMap, Map<String, Object> oldMap, Map<String, Object> newMap) {
 		Map<String, Object> newDtMap;
 		if (dtMap == null) {
@@ -236,12 +316,12 @@ public class EventProcessorImpl implements ServiceBusListener {
 			newDtMap = dtMap;
 		}
 		Set<String> diff = findDifferences(oldMap, newMap);
-		for (String d: diff) {
+		for (String d : diff) {
 			newDtMap.put(d, newMap.get(d));
 		}
 		return newDtMap;
 	}
-	
+
 	public BasicObjectSyncStorage getStorage() {
 		return storage;
 	}
