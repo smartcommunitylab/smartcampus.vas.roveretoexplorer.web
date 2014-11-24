@@ -18,12 +18,21 @@ package eu.trentorise.smartcampus.roveretoexplorer.controller;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,6 +60,26 @@ public class ObjectController extends AbstractObjectController {
 
 	@Autowired
 	private ReviewsMongoStorage reviewStorage;
+	
+	
+	@Value("${roveretoexplorer.mail.host}")
+	private String mailHost;
+	@Autowired
+	@Value("${roveretoexplorer.mail.port}")
+	private String mailPort;
+	@Autowired
+	@Value("${roveretoexplorer.mail.user}")
+	private String mailUser;
+	@Autowired
+	@Value("${roveretoexplorer.mail.password}")
+	private String mailPassword;
+	@Autowired
+	@Value("${roveretoexplorer.mail.from}")
+	private String mailFrom;
+	@Autowired
+	@Value("${roveretoexplorer.mail.to}")
+	private String mailTo;	
+	
 
 	@RequestMapping(method = RequestMethod.GET, value="/events")
 	public @ResponseBody List<ExplorerObject> getAllEventObject(HttpServletRequest request) throws Exception {
@@ -219,6 +248,19 @@ public class ObjectController extends AbstractObjectController {
 			
 			reviews.getReviews().add(review);
 			
+			try {
+			StringBuffer sb = new StringBuffer();
+			sb.append("Id: " + obj.getId() + "\nReview:\n");
+			sb.append("Author: " + review.getAuthor() + "\n");
+			sb.append("Comment: " + review.getComment() + "\n");
+			sb.append("Date: " + review.getDate() + "\n");
+			sb.append("Rating: " + review.getRating() + "\n");
+			sendEmail("RoveretoExplorer changes [review] for ExplorerObject \"" + obj.getTitle() + "\"", sb.toString());
+			} catch (Exception e) {
+				logger.error("Error sending review email");
+				e.printStackTrace();
+			}
+			
 			reviewStorage.storeObject(reviews);
 			syncStorage.storeObject(obj);
 			obj.filterUserData(userId);
@@ -307,6 +349,16 @@ public class ObjectController extends AbstractObjectController {
 				response.setStatus(HttpServletResponse.SC_CONFLICT);
 				return null;
 			}
+			try {
+				String diff = findDiff(oldObject, newObject);
+				if (diff.length() > 0) {
+					sendEmail("RoveretoExplorer changes [edit] for ExplorerObject \"" + oldObject.getTitle() + "\"", diff);
+				}
+			} catch (Exception e) {
+				logger.error("Error sending edit email");
+				e.printStackTrace();
+			}		
+			
 			syncStorage.storeObject(newObject);
 			return (ExplorerObject)syncStorage.getObjectById(newObject.getId());
 
@@ -315,6 +367,48 @@ public class ObjectController extends AbstractObjectController {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return null;
+		}
+	}
+	
+	private String findDiff(ExplorerObject oldObject, ExplorerObject newObject) {
+		StringBuilder sb = new StringBuilder();
+		
+		appendChanges(sb, "Description", oldObject.getDescription(), newObject.getDescription());
+		appendChanges(sb, "Title", oldObject.getTitle(), newObject.getTitle());
+		appendChanges(sb, "Source", oldObject.getSource(), newObject.getSource());
+		appendChanges(sb, "Type", oldObject.getType(), newObject.getType());
+		appendChanges(sb, "Location", oldObject.getLocation(), newObject.getLocation());
+		appendChanges(sb, "From", oldObject.getFromTime(), newObject.getFromTime());
+		appendChanges(sb, "To", oldObject.getToTime(), newObject.getToTime());
+		appendChanges(sb, "Timing", oldObject.getTiming(), newObject.getTiming());
+		appendChanges(sb, "CustomData", oldObject.getCustomData(), newObject.getCustomData());
+//		appendChanges(sb, "CommunityData", oldObject.getCommunityData(), newObject.getCommunityData());
+		
+		appendChanges(sb, "Category", oldObject.getCategory(), newObject.getCategory());
+		appendChanges(sb, "Contacts", oldObject.getContacts(), newObject.getContacts());
+		appendChanges(sb, "Address", oldObject.getAddress(), newObject.getAddress());
+		appendChanges(sb, "WhenWhere", oldObject.getWhenWhere(), newObject.getWhenWhere());
+		appendChanges(sb, "Image", oldObject.getImage(), newObject.getImage());
+		appendChanges(sb, "Origin", oldObject.getOrigin(), newObject.getOrigin());
+		appendChanges(sb, "WebsiteUrl", oldObject.getWebsiteUrl(), newObject.getWebsiteUrl());
+		appendChanges(sb, "FacebookUrl", oldObject.getFacebookUrl(), newObject.getFacebookUrl());
+		appendChanges(sb, "TwitterUrl", oldObject.getTwitterUrl(), newObject.getTwitterUrl());
+		
+		if (sb.length() > 0) {
+			sb.insert(0, "Id: " + oldObject.getId() + "\nChanges:\n");
+		}
+		
+		return sb.toString();
+	}
+	
+	private void appendChanges(StringBuilder sb, String prefix, Object oldValue, Object newValue) {
+		if (oldValue == null && newValue == null) {
+			return;
+		}
+		if (oldValue != null && !oldValue.equals(newValue)) {
+			sb.append("\"" + prefix + "\":\n\told = " + oldValue + "\n\tnew = " + newValue + ".\n");
+		} else if (newValue != null && !newValue.equals(oldValue)) {
+			sb.append("\"" + prefix + "\":\n\told = " + oldValue + "\n\tnew = " + newValue + ".\n");
 		}
 	}
 
@@ -327,6 +421,42 @@ public class ObjectController extends AbstractObjectController {
 			return bp.getSurname();
 		return "";
 	}
+	
+	private void sendEmail(String subject, String msg) {
+		try {
+
+			PasswordAuthentication pa = new PasswordAuthentication(mailUser, mailPassword);
+
+			Properties properties = System.getProperties();
+			properties.put("mail.transport.protocol", "smtp");
+			properties.put("mail.smtp.auth", "true");
+			properties.setProperty("mail.smtp.host", mailHost);
+			properties.setProperty("mail.smtp.port", mailPort);
+
+			Session session = Session.getInstance(properties, new Authenticator() {
+				public PasswordAuthentication getPasswordAuthentication() {
+					try {
+						return new PasswordAuthentication(mailUser, mailPassword);
+					} catch (Exception e) {}
+					return null;
+				}
+			});
+
+			MimeMessage message = new MimeMessage(session);
+			message.setFrom(new InternetAddress(mailFrom));
+			String to[] = mailTo.split(",");
+			for (String t: to) {
+				message.addRecipient(Message.RecipientType.TO, new InternetAddress(t));
+			}
+			message.setSubject(subject);
+			message.setText(msg);
+			Transport.send(message);
+			System.out.println("Email sent.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}	
+	
 
 	// @RequestMapping(value = "/social/review/{parentId}", method =
 	// RequestMethod.PUT)
