@@ -31,6 +31,7 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -41,6 +42,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.CommunityData;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
@@ -377,7 +379,7 @@ public class ObjectController extends AbstractObjectController {
 		appendChanges(sb, "Title", oldObject.getTitle(), newObject.getTitle());
 		appendChanges(sb, "Source", oldObject.getSource(), newObject.getSource());
 		appendChanges(sb, "Type", oldObject.getType(), newObject.getType());
-		appendChanges(sb, "Location", oldObject.getLocation(), newObject.getLocation());
+		appendChanges(sb, "Location", (oldObject.getLocation()!=null)?Arrays.asList(ArrayUtils.toObject(oldObject.getLocation())):null, (newObject.getLocation()!=null)?Arrays.asList(ArrayUtils.toObject(newObject.getLocation())):null);
 		appendChanges(sb, "From", oldObject.getFromTime(), newObject.getFromTime());
 		appendChanges(sb, "To", oldObject.getToTime(), newObject.getToTime());
 		appendChanges(sb, "Timing", oldObject.getTiming(), newObject.getTiming());
