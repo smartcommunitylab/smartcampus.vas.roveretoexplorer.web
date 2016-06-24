@@ -17,7 +17,6 @@ package eu.trentorise.smartcampus.roveretoexplorer.controller;
 
 
 import java.util.Collections;
-import java.util.EventObject;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -59,10 +58,12 @@ public class SyncController extends AbstractObjectController {
 			Map<String, Object> exclude = new HashMap<String, Object>();
 			if (syncReq.getSyncData().getExclude() != null) {
 				exclude.putAll(syncReq.getSyncData().getExclude());
-			}			
-			SyncData result = storage.getSyncData(syncReq.getSince(), userId, syncReq.getSyncData().getInclude(), exclude);
+			}	
+			// don't write anymore
+//			SyncData result = storage.getSyncData(syncReq.getSince(), userId, syncReq.getSyncData().getInclude(), exclude);
+			SyncData result = storage.getSyncData(syncReq.getSince(), userId);
 			filterResult(result, userId);
-			storage.cleanSyncData(syncReq.getSyncData(), userId);
+//			storage.cleanSyncData(syncReq.getSyncData(), userId);
 			return new ResponseEntity<SyncData>(result,HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
