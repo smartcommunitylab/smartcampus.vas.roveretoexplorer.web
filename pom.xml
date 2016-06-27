@@ -40,7 +40,7 @@
 		<dependency>
 			<groupId>eu.trentorise.smartcampus</groupId>
 			<artifactId>syncstorage.web</artifactId>
-			<version>1.2</version>
+			<version>1.3</version>
 			<type>jar</type>
 		</dependency>
 		<dependency>
